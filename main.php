@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>OE6_WDD_Caacbay</title>
+        <title>OE8_WDD_Caacbay</title>
         <style>
             body {
                 background-color: whitesmoke;
@@ -15,88 +15,66 @@
                 box-shadow: 1px 1px 2px 1px grey;
                
             }
-            
+            .btn {
+  background-color: DodgerBlue;
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+}
         </style>
 
 </head>
 <body>
     <center>
-<form action ="" method = "POST">
-<input type = "text" name = "id" placeholder = "Enter the ID"/> <br>
-<input type = "submit" name = "search" value = "Search your Data"/>
-</form>
-
+<H1>Outcomes Evaluation 8<br></H1>
+<H2>PHP Delete and display all fields except password with MySQL. 
+    <br>
+<table>
+  <tr>
+    <th>ID</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Email</th>
+    <th>Address</th>
+    <th>Registration Date</th>
+  </tr>
+    <body>
 <?php
 $connection = mysqli_connect("localhost","root","");
 $db = mysqli_select_db($connection, 'it15_database');
+$query = "SELECT * FROM users_tbl";
+$query_run = mysqli_query($connection, $query);
 
-if (isset($_POST['search'])){
-
-    $id = $_POST['id'];
-
-    $query = "SELECT * FROM users_tbl where id = '$id' ";
-    $query_run = mysqli_query($connection, $query);
-
-    while($row = mysqli_fetch_array($query_run)) 
-    {
+if (mysqli_num_rows($query_run)>0){
+    foreach($query_run as $row){
         ?>
-            <form action= "" method = "POST">
-            <input type = "hidden" name = "id"  value = "<?php echo $row['id']?>"/> <br>
-            <input type = "text" name = "fname"  value = " <?php echo $row['FirstName'] ?>"/><br>
-            <input type = "text" name = "lname"  value = " <?php echo $row['LastName'] ?>"/><br>
-            <input type = "text" name = "address"  value = " <?php echo $row['Address']?>"/><br>
-            <input type = "text" name = "email"  value = " <?php echo $row['Email']?>"/><br>
-            <input type = "text" name = "bday"  value = " <?php echo $row['BirthDate']?>"/><br>
-            <input type = "text" name = "regd"  value = " <?php echo $row['regs_date']?>"/><br>
-            <input type = "submit" name = "update" value = "Update your Data"/><br>
-            <input type = "submit" name = "delete" value = "Delete"/>
-    </form>
-    <?php
+        <tr>
+            <td><?= $row['id']; ?></td>
+            <td><?= $row['FirstName']; ?></td>
+            <td><?= $row['LastName']; ?></td>
+            <td><?= $row['Email']; ?></td>
+            <td><?= $row['Address']; ?></td>
+            <td><?= $row['regs_date']; ?></td>
+            <td><a href = 'delete.php?id=<?=$row['id'];?>'> Delete</td>
+        </tr>
+        
+        <?php
+        
     }
 }
+
 ?>
 </center>
 </body>
 </html>
 
-<?php
-    $connection = mysqli_connect("localhost","root","");
-    $db = mysqli_select_db($connection, 'it15_database');
-
-    if(isset($_POST['update'])){
-        $fname = $_POST['fname'];
-        $address = $_POST['address'];
-        $email = $_POST['email'];
-        $bday = $_POST['bday'];
-        $regd = $_POST['regd'];
-        
-        $query = "UPDATE users_tbl SET FirstName = '$_POST[fname]',LastName = '$_POST[lname]',Address = '$_POST[address]', Email = '$_POST[email]',birthdate = '$_POST[bday]',regs_date = '$_POST[regd]' where id = '$_POST[id]'";
-        $query_run = mysqli_query($connection, $query);
-
-        if ($query_run){
-            echo '<script>alert("The data is updated!!") </script>';
-        }
-        else {
-            echo '<script>alert("Error! Data didnt update") </script>';
-        }
-    }
-
-?>
-<?php
-    $connection = mysqli_connect("localhost","root","");
-    $db = mysqli_select_db($connection, 'it15_database');
-
-    if(isset($_POST['delete'])){
-
-        $query = "DELETE FROM users_tbl where id = '$_POST[id]'";
-        $query_run = mysqli_query($connection, $query);
-
-        if ($query_run){
-            echo '<script>alert("Data is deleted!") </script>';
-        }
-        else {
-            echo '<script>alert("Error! Cant delete the data") </script>';
-        }
-    }
-
-?>
